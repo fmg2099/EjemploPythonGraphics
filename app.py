@@ -1,16 +1,19 @@
 from cmu_graphics import *
 import time 
 
-# Set the window size
+# Tamaño de la ventana
 app.width = 1024
 app.height = 768
 app.background = 'black'
 
+#número de cuadros por segundo que se refresca la simulación
+#si lo ponemos en un divisor de 60, estaría efectivamente realizando vertical sync.
+#para una buena experiencia de usuario, estos valores son 30 o 60.
 app.stepsPerSecond = 60
 #en cmu-graphics los labels son objetos, no se deben llamar en onStep
 label = Label('cmu-graphics', app.width/2, app.height/2, font='monospace', size=24, bold=True, fill='white')
 
-label_fps = Label(f'FPS: 999', 60,30, size=16, fill='green')
+label_fps = Label(f'FPS: 999', 60,30, size=16, fill='green', font='monospace', bold=True)
 velX = 200
 velY = 100
 prev_time = time.time()
@@ -40,8 +43,11 @@ def calcFPS(delta):
 
     return len(fps_values)/sum(fps_values)
 
+#método de refresco (update) en CMU Graphics
 def onStep():
     global prev_time, velX, velY
+    # cmu-graphics no provee un método para obtener el tiempo de un frame, 
+    #por lo que debemos calcularlo cada frame
     delta_time = time.time() - prev_time
     label.centerX = label.centerX + velX * delta_time
     label.centerY = label.centerY + velY * delta_time
